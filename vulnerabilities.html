@@ -40,30 +40,32 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
-					<h1>OWASP Top 10 (2013) Item #9</h1>
-					<h3>Using Components with Known Vulnerabilities
-					<p>
-						<small>Created by James Forster / james.forster@digital.hmrc.gov.uk</small>
-					</p>
+				<section data-background-image="/images/matrix.gif" data-background-size="400px" data-background-repeat="repeat">
+					<div style="background-color:rgba(0,100,25,0.6);border-radius:50px;border:5px solid #fff;padding:50px;">
+						<h2>Using Components with Known Vulnerabilities</h2>
+						<p>Research into OWASP Top 10 Risk List</p>
+						<p>
+							<br />
+							<small>Created by James Forster - <a href="mailto:james.forster@digital.hmrc.gov.uk">james.forster@digital.hmrc.gov.uk</a> </small>
+						</p>
+					</div>
 				</section>
 
 				<section>
 					<h2>Contents</h2>
 					<ol>
-						<li><a href="#/flaw-description">Using components with known vulnerabilities</a></li>
-						<li><a href="#/flaw-examples">Historical examples</a></li>
-						<li><a href="#/flaw-mitigation">Mitigating the problem</a></li>
-						<li><a href="#/flaw-tools">Automated solutions and tools</a></li>
-						<li><a href="#/flaw-summary">Summary</a></li>
+						<li><a href="#/flaw-description">What is it?</a></li>
+						<li><a href="#/flaw-solution">Solution</a></li>
+						<li><a href="#/flaw-play">Relevance to Play! framework</a></li>
+						<li><a href="#/flaw-examples">Examples</a></li>
 					</ol>
 				</section>
 
 				<section>
 					<section id="flaw-description">
-						<h2>Description</h2>
+						<h2>What is it?</h2>
 						<p>Usage of third-party libraries, commercial and open-source, has increased in applications over time.</p>
-						<p>Even in the most utilised and trusted components vulnerabilities can arise compromising their security.</p>
+						<p>Even the most utilised and trusted components can contain vulnerabilities that compromise their security.</p>
 						<p>Introducing these libraries improperly can lead to the introduction of the security flaws to all applications which use them.</p>
 						<p>Projects including multiple dependancies can potentially be introducing large numbers of security vulnerabilities!</p>
 					</section>
@@ -76,8 +78,8 @@
 					<section>
 						<h2>Exploiters</h2>
 						<p>There are plenty of reasons to target 3rd party libraries for security flaws rather than directly targeting the main application.</p>
-						<p>Components are often open source and therefore the potential exploiter has access to the code to determine the vulnerabilities, although this also allows the flaw to be found more easily for fixing as well.</p>
-						<p>The potential for any flaw to extend across multiple applications also makes it an appealing target as the discovery and exploitation of any  vulnerability grants a large range of potential targets.</p>
+						<p>Components are often open source and therefore the potential exploiter has access to the code to determine the vulnerabilities.</p>
+						<p>The potential for any flaw to extend across multiple applications also makes it an appealing target, as the discovery and exploitation of any  vulnerability grants a large range of potential targets.</p>
 					</section>
 					<section>
 						<h2>Updates and fixes</h2>
@@ -89,7 +91,53 @@
 					<section>
 						<h2>Undiscovered vulnerabilities</h2>
 						<p>In many cases the vulnerabilities found in component libraries are not yet discovered.</p>
-						<p>As a result many new breaches are not due to new updates to the library but already found in pre-existing code.</p>
+						<p>As a result many new breaches are not due to new updates to the library but already existed in the code.</p>
+					</section>
+				</section>
+
+				<section>
+					<section id="flaw-solution">
+						<h2>Solution!</h2>
+						<p>There are very few ways to prevent utilisation of vulnerable third party software short of never using any third party dependancies at all.</p>
+						<p>There are however methods to at least reduce the risk in using libraries.</p>
+						<p>Following the four simple steps outlined below allows at least an extra degree of control and security.</p>
+						<p>Additionally GDS guidelines on third party libraries can be found <a href="https://www.gov.uk/service-manual/making-software/dependency-management.html" target="_blank">here</a>.</p>
+					</section>
+					<section>
+						<h2>Inventory</h2>
+						<p>The first step is to take stock of your current project dependancies and versions.</p>
+						<p>This involves looking up known faults and vulnerabilities for the version used as well as how out of date it is.</p>
+						<p>This also involves checking the dependancies of the dependancies which are often overlooked.</p>
+					</section>
+					<section>
+						<h2>Analyze</h2>
+						<p>When acquiring or updating a library make sure to always check for yourself the status of the build.</p>
+						<p>If examining code directly is infeasible then check reviews, process, licenses and other aspects of the library project.</p>
+						<p>This early step can help prevent a lot of hassle compared to dealing with problems further down the line.</p>
+					</section>
+					<section>
+						<h2>Control</h2>
+						<p>A good process to have in place is a method by which only authorised libraries and versions can be used in projects.</p>
+						<p>A developer can request to have a library added to the list when a suitable level of analysis is complete.</p>
+						<p>The method to determine what ends up on this list should not be overly difficult as it will encourage users to bypass the restriction.</p>
+					</section>
+					<section>
+						<h2>Monitor</h2>
+						<p>Where analysis has shown it to be safe, all dependancies should be kept up to date.</p>
+						<p>Having to alter your code to take into account of an update is no excuse not to do so and is an accepted fact of using third party libraries.</p>
+						<p>As there are typically no automated methods to be informed of updates to libraries, it is the developer's job to keep up to date with the library's development status and news.</p>
+					</section>
+					<section id="flaw-tools">
+						<h2>Tools</h2>
+						<p>There are some automated tools that can keep you informed of the latest news and versions of dependancies.</p>
+						<p>While these are useful and can be a time-saver, they are no substitute for performing the checks yourself.</p>
+					</section>
+					<section>
+						<h2>Tools</h2>
+						<p>SBT can be used to keep dependancies up to date by using 'latest-integration' in place of the version number but this may not be wanted behaviour.</p>
+						<p>OWASP's Dependency Check is a tool that examines dependancies for any publically reported vulnerabilities for java libraries.</p>
+						<p>Sonatype's CLM is an automatic tool designed to manage dependancies throughout the development lifecycle.</p>
+						<p>"Bobby" is an in house tool created to perform a similar function as Dependancy Check for scala libraries.</p>
 					</section>
 				</section>
 
@@ -116,59 +164,8 @@
 				</section>
 
 				<section>
-					<section id="flaw-mitigation">
-						<h2>Mitigation</h2>
-						<p>There are very few ways to prevent utilisation of vulnerable third party software short of never using any third party dependancies at all.</p>
-						<p>There are however methods to at least reduce the risk in using libraries.</p>
-						<p>Following the four simple steps outlined below allows at least an extra degree of control and security.</p>
-						<p>Additionally GDS guidelines on third party libraries can be found <a href="https://www.gov.uk/service-manual/making-software/dependency-management.html" target="_blank">here</a>.</p>
-					</section>
-					<section>
-						<h2>Inventory</h2>
-						<p>The first step is to take stock of your current project dependancies and versions.</p>
-						<p>This involves looking up known faults and vulnerabilities for the version used as well as how out of date it is.</p>
-						<p>This also involves checking the dependancies of the dependancies which are often overlooked.</p>
-					</section>
-					<section>
-						<h2>Analyze</h2>
-						<p>When acquiring or updating a library make sure to always check for yourself the status of the build.</p>
-						<p>If examining code directly is infeasible then check reviews, process, licenses and other aspects of the library project.</p>
-						<p>This early step can help prevent a lot of hassle compared to dealing with problems further down the line.</p>
-					</section>
-					<section>
-						<h2>Control</h2>
-						<p>A good process to have in place is a method by which only authorised libraries and versions can be used in projects.</p>
-						<p>A developer can request to have a libary added to the list when a suitable level of analysis is complete.</p>
-						<p>The method to determine what ends up on this list should not be overly difficult as it will encourage users to bypass the restriction.</p>
-					</section>
-					<section>
-						<h2>Monitor</h2>
-						<p>Where analysis has shown it to be safe, all dependancies should be kept up to date.</p>
-						<p>Having to alter your code to take into account of an update is no excuse not to do so and is an accepted fact of using third party libraries.</p>
-						<p>As there are typically no automated methods to be informed of updates to libraries it is the developer's job to keep up to date with the library's development status and news.</p>
-					</section>
-				</section>
-
-				<section>
-					<section id="flaw-tools">
-						<h2>Tools</h2>
-						<p>There are some automated tools that can keep you informed of the latest news and versions of dependancies.</p>
-						<p>While these are useful and can be a time-saver, they are no substitute for performing the checks yourself.</p>
-					</section>
-					<section>
-						<h2>Tools</h2>
-						<p>SBT can be used to keep dependances up to date by using 'latest-integration' in place of the version number but this may not be wanted behaviour.</p>
-						<p>OWASP's Dependency Check is a tool that examines dependancies for any publically reported vulnerabilities for java libraries.</p>
-						<p>Sonatype's CLM is an automatic tool designed to manage dependancies throughout the development lifecycle.</p>
-						<p>"Bobby" is an in house tool created to perform a similar function as Dependancy Check for scala libraries.</p>
-					</section>
-				</section>
-
-				<section>
 					<section id="flaw-summary">
-						<h2>Summary</h2>
-						<p>Incredibly wide-reaching and difficult to prevent entirely, the risk of vulnerabilities drives the point home that great care should be taken when dealing with third-party libraries.</p>
-						<p>The best method of dealing with these problems is to be vigilant and ready to deal with any emergent issues as quickly as possible.</p>
+						<h1>Fin</h1>
 					</section>
 				</section>
 			</div>

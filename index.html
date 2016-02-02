@@ -7,7 +7,7 @@
 		<title>reveal.js – The HTML Presentation Framework</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="author" content="James Forster">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -40,96 +40,116 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
-					<h1>OWASP Top 10 (2013) Item #4</h1>
-					<h3>Insecure Direct Object References
-					<p>
-						<small>Created by James Forster / james.forster@digital.hmrc.gov.uk</small>
-					</p>
+
+				<section data-background-image="/images/matrix.gif" data-background-size="400px" data-background-repeat="repeat">
+					<div style="background-color:rgba(0,100,25,0.6);border-radius:50px;border:5px solid #fff;padding:50px;">
+						<h2>Insecure Direct Object Reference</h2>
+						<p>Research into OWASP Top 10 Risk List</p>
+						<p>
+							<br />
+							<small>Created by James Forster - <a href="mailto:james.forster@digital.hmrc.gov.uk">james.forster@digital.hmrc.gov.uk</a> </small>
+						</p>
+					</div>
 				</section>
 
 				<section>
 					<h2>Contents</h2>
 					<ol>
-						<li><a href="#/flaw-description">What is an insecure direct object reference?</a></li>
-						<li><a href="#/flaw-indirect">Obfuscating the reference</a></li>
-						<li><a href="#/flaw-files">Preventing traversal of directories</a></li>
-						<li><a href="#/flaw-secure">Making the reference secure</a></li>
+						<li><a href="#/flaw-description">What is it?</a></li>
+						<li><a href="#/flaw-solution">Solution</a></li>
 						<li><a href="#/flaw-play">Relevance to Play! framework</a></li>
-						<li><a href="#/flaw-summary">Summary</a></li>
 					</ol>
 				</section>
 
 				<!-- Example of nested vertical slides -->
 				<section>
 					<section id="flaw-description">
-						<h2>Description</h2>
+						<h2>What is it?</h2>
 						<p>This type of security flaw can occur when the developer exposes an object through the URL, form parameter or a cookie directly.</p>
-						<p>e.g. http://www.website.com/?accountid=1</p>
+						<pre><code class="hljs" data-trim>
+							http://www.website.com/?accountid=1
+						</code></pre>
 					</section>
 					<section>
 						<h2>Utilising the flaw</h2>
 						<p>The potential intruder would first require access to an account of their own and the secure content it contains.</p>
 						<p>If there was no verification in place to prevent it, the intruder could then change the direct reference manually:</p>
-						<p>e.g. http://www.website.com/?accountid=2</p>
+						<pre><code class="hljs" data-trim>
+							http://www.website.com/?accountid=2
+						</code></pre>
 						<p>Now they have access to all the information and potentially functions available to the account with the ID 2.</p>
 					</section>
 					<section>
 						<h2>Vertical Escalation</h2>
 						<p>The type of intrusion referred to above is known as horizontal escalation of privilege, where access level remains the same.</p>
 						<p>However in the worst cases this method can also provide a vertical escalation of privilege where a higher level of access can be gained.</p>
-						<p>e.g. http://www.website.com/?accountid=2&admin=true</p>
+						<pre><code class="hljs" data-trim>
+							http://www.website.com/?accountid=2&admin=true
+						</code></pre>
 					</section>
 					<section>
 						<h2>Path Traversal</h2>
 						<p>The flaw can also extend to directory and file references.</p>
 						<p>By changing any file reference in the same manner the intruder can gain access to non-intended files.</p>
-						<p>Utilising common directory change commands (such as ../) potentially any file on the server can be accessed in this manner in the extreme cases.</p>
+						<p>Utilising common directory change commands (such as ../) potentially any file on the server can be accessed in this manner.</p>
+						<pre><code class="hljs" data-trim>
+							http://www.website.com/?/../../admin/passwords.txt
+						</code></pre>
 					</section>
 				</section>
 
 				<section>
-					<section id="flaw-indirect">
-						<h2>Obfuscating the reference</h2>
-						<p>One of the key problems exposing this flaw the fact the reference is direct.</p>
-						<p>Therefore a simple solution would be to simply make the reference indirect.</p>
+					<section id="flaw-solution">
+						<h2>Solution!</h2>
+						<p>The simplest solution is to not expose any URL or form parameters at all.</p>
+						<p>There are three potential ways to solve the problem beyond this:</p>
+						<ul>
+							<li>Obfuscation</li>
+							<li>White/Blacklisting</li>
+							<li>Verification</li>
+						</ul>
 					</section>
 					<section>
 						<h2>Mapping</h2>
 						<p>The direct object reference can be converted via mapping into a session based indirect reference.</p>
 						<p>The reference map provides a key which links the indirect reference to the direct reference without ever exposing that data to the user.</p>
-						<p>While this doesn't prevent potential users altering the values, it becomes nigh impossible to create a valid indirect reference as the mapping is based on the user session and any alterations can be detected.</p>
-						<p>e.g. http://www.website.com/?accountid=Xvqw2JEm84w1qqLN1vE5XZUdc7BFqarB0</p>
+						<pre><code class="hljs" data-trim>
+							http://www.website.com/?accountid=Xvqw2JEm84w1qqLN1vE5XZUdc7BFqarB0
+						</code></pre>
+						<p>While potentially less secure this can also be persisted beyond the session via encryption.</p>
 					</section>
-					<section>
-						<h2>Encryption</h2>
-						<p>In the case where the mapping needs to last beyond a single session (needs to be 'durable') then a more generalised encyption method would need to be deployed.</p>
-						<p>Although this provides longer term solution if the encryption is not done correctly it can be cracked providing a new way to get past the obfuscation.</p>
-					</section>
-					<section>
-						<h2>Unexposed</h2>
-						<p>Potentially the simplest and most secure form of obfuscation is to simply not expose any URL or form parameters at all.</p>
-						<p>Without access to these parameters it becomes impossible to escalate ior utilise path traversal through this method.</p>
-					</section>
-						
-				</section>
-
-				<section>
 					<section id="flaw-files">
-						<h2>Preventing Traversal</h2>
-						<p>The prevention of traversal requires that a series of checks be placed on any request made.</p>
-						<p>A simple solution is to only permit access to certain files as part of the request and simply checking that this is not breached by the input.</p>
-						<p>However it cannot prevent intruders from accessing files that are accessible by only some users.</p>
-					</section>
+						<h2>Whitelist</h2>
+						<p>A simple solution is to only permit access to certain files and pages as part of the request and simply checking that this is not breached by the input.</p>
+						<p>However it cannot prevent intruders from accessing files or pages that are accessible by only some users.</p>
+					</section>	
 					<section>
 						<h2>Filters/Blacklists</h2>
 						<p>In comparison to the whitelist method described above, using a filter or blacklist to check for dangerous terms is not as useful.</p>
-						<p>This is because there are many more ways to bypass a blacklist method so simply blocking terms such as "../" or "/" are not sufficient to prevent all path traversal.</p>
+						<p>This is because there are many more ways to bypass a blacklist method so simply blocking terms such as "../" or "/" is not sufficient to prevent all manipulation.</p>
 						<p>However, while potentially more dangerous, a fully comprehensive blacklist would be secure.</p>
+					</section>
+					<section>
+						<h2>Verification</h2>
+						<p>One way to close this security flaw is to simply double check the identity of the user on each request.</p>
+						<p>This stops any abuse of direct object references.</p>
+						<pre><code class="hljs" data-trim>
+[Authorize]
+public class AccountsController : Controller
+{
+	[HttpGet]
+	public ActionResult Details(long accountNumber)
+	{
+		Account account = _accountRepository.Find(accountNumber);
+		if (account.UserId != User.Identity.GetUserId())
+			{
+				return new HttpUnauthorizedResult("User is not Authorized.");
+			} 
+       					</code></pre>
 					</section>
 				</section>
 
-				<section>
+				<!-- <section>
 					<section id="flaw-secure">
 						<h2>Securing the reference</h2>
 						<p>There is an absolute method of preventing unauthorised access to any information or file which none of the previously described methods can completely do.</p>
@@ -141,22 +161,26 @@
 						<p>This shuts down the potential of vertical escalation and path traversal as any changes would not affect the level of authorisation of the original login session.</p>
 					</section>
 					<section>
-						<h2>Full verification</h2>
+						<h2>Verification</h2>
 						<p>To be absolutely secure in preventing this security flaw you can simply double check the identity of the user on each request.</p>
 						<p>This closes all potential of abusing any direct object references.</p>
+						
 					</section>
-				</section>
+				</section> -->
 
 				<section id="flaw-play">
-					<h2>Play! framework</h2>
+					<h2>How is it relevant to us?</h2>
+					<p>
+						When working with Scala/Play our applications are still <b style="color:#faa">vulnerable</b>.
+					</p>
+					<p>~~~</p>
+
 					<p>All web frameworks are potentially vulnerable to this security flaw as it is a case of bad user practice most of the time.</p>
-					<p>However it is worth noting that Play! is seemingly designed to limit the amount of manual editing you can perform to a URL and it is very difficult to create this flaw in the framework even when actively trying to.</p>
+					<p>However it is worth noting that Play! encourages practices through its' design which help prevent the creation of this flaw.</p>
 				</section>
 
 				<section id="flaw-summary">
-					<h2>Summary</h2>
-					<p>The optimal solution to the security flaw created by using insecure direct object references is by making then secure, although obfuscation also helps to provide an additional layer of security.</p>
-					<p>If the design of the service is particularly bad however and the entire identity of the user is exposed in the URL and verification is done through that then obfuscation is your only option. However at the point it should be considered recreating the code without this flaw as it will always be a major issue.</p>
+					<h1>Fin</h1>
 				</section>
 			</div>
 
