@@ -65,75 +65,92 @@
 				<section>
 					<section id="flaw-description">
 						<h2>What is it?</h2>
-						<p>This type of security flaw can occur when the developer exposes an object through the URL, form parameter or a cookie directly.</p>
+						<ul>
+							<li><p>This type of security flaw can occur when the developer exposes an object through the URL, form parameter or a cookie directly.</p></li>
+						</ul>
 						<pre><code class="hljs" data-trim>
 							http://www.website.com/?accountid=1
 						</code></pre>
 					</section>
 					<section>
 						<h2>Utilising the flaw</h2>
-						<p>The potential intruder would first require access to an account of their own and the secure content it contains.</p>
-						<p>If there was no verification in place to prevent it, the intruder could then change the direct reference manually:</p>
-						<pre><code class="hljs" data-trim>
-							http://www.website.com/?accountid=2
-						</code></pre>
-						<p>Now they have access to all the information and potentially functions available to the account with the ID 2.</p>
+						<ul>
+							<li><p>The potential intruder would first require access to an account of their own and the secure content it contains.</p></li>
+							<li><p>If there was no verification in place to prevent it, the intruder could then change the direct reference manually:</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?accountid=2
+							</code></pre>
+							<li><p>Now they have access to all the information and potentially functions available to the account with the ID 2.</p></li>
+						</ul>
 					</section>
 					<section>
 						<h2>Vertical Escalation</h2>
-						<p>The type of intrusion referred to above is known as horizontal escalation of privilege, where access level remains the same.</p>
-						<p>However in the worst cases this method can also provide a vertical escalation of privilege where a higher level of access can be gained.</p>
-						<pre><code class="hljs" data-trim>
-							http://www.website.com/?accountid=2&admin=true
-						</code></pre>
+						<ul>
+							<li><p>The type of intrusion referred to above is known as horizontal escalation of privilege, where access level remains the same.</p></li>
+							<li><p>However in the worst cases this method can also provide a vertical escalation of privilege where a higher level of access can be gained.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?accountid=2&admin=true
+							</code></pre>
+						</ul>
 					</section>
 					<section>
 						<h2>Path Traversal</h2>
-						<p>The flaw can also extend to directory and file references.</p>
-						<p>By changing any file reference in the same manner the intruder can gain access to non-intended files.</p>
-						<p>Utilising common directory change commands (such as ../) potentially any file on the server can be accessed in this manner.</p>
-						<pre><code class="hljs" data-trim>
-							http://www.website.com/?/../../admin/passwords.txt
-						</code></pre>
+						<ul>
+							<li><p>The flaw can also extend to directory and file references.</p></li>
+							<li><p>By changing any file reference in the same manner the intruder can gain access to non-intended files.</p></li>
+							<li><p>Utilising common directory change commands (such as ../) potentially any file on the server can be accessed in this manner.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?/../../admin/passwords.txt
+							</code></pre>
+						</ul>
 					</section>
 				</section>
 
 				<section>
 					<section id="flaw-solution">
 						<h2>Solution!</h2>
-						<p>The simplest solution is to not expose any URL or form parameters at all.</p>
-						<p>There are three potential ways to solve the problem beyond this:</p>
 						<ul>
-							<li>Obfuscation</li>
-							<li>White/Blacklisting</li>
-							<li>Verification</li>
+							<li><p>The simplest solution is to not expose any URL or form parameters at all.</p></li>
+							<li><p>There are three potential ways to solve the problem beyond this:</p></li>
+							<ul>
+								<li>Obfuscation</li>
+								<li>White/Blacklisting</li>
+								<li>Verification</li>
+							</ul>
 						</ul>
 					</section>
 					<section>
 						<h2>Mapping</h2>
-						<p>The direct object reference can be converted via mapping into a session based indirect reference.</p>
-						<p>The reference map provides a key which links the indirect reference to the direct reference without ever exposing that data to the user.</p>
-						<pre><code class="hljs" data-trim>
-							http://www.website.com/?accountid=Xvqw2JEm84w1qqLN1vE5XZUdc7BFqarB0
-						</code></pre>
-						<p>While potentially less secure this can also be persisted beyond the session via encryption.</p>
+						<ul>
+							<li><p>The direct object reference can be converted via mapping into a session based indirect reference.</p></li>
+							<li><p>The reference map provides a key which links the indirect reference to the direct reference without ever exposing that data to the user.</p></li>
+							<li><p>While potentially less secure this can also be persisted beyond the session via encryption.</p></li>
+							<pre><code class="hljs" data-trim>
+								http://www.website.com/?accountid=Xvqw2JEm84w1qqLN1vE5XZUdc7BFqarB0
+							</code></pre>
+						</ul>
 					</section>
 					<section id="flaw-files">
 						<h2>Whitelist</h2>
-						<p>A simple solution is to only permit access to certain files and pages as part of the request and simply checking that this is not breached by the input.</p>
-						<p>However it cannot prevent intruders from accessing files or pages that are accessible by only some users.</p>
+						<ul>
+							<li><p>A simple solution is to only permit access to certain files and pages as part of the request and simply checking that this is not breached by the input.</p></li>
+							<li><p>However it cannot prevent intruders from accessing files or pages that are accessible by only some users.</p></li>
+						</ul>
 					</section>	
 					<section>
 						<h2>Filters/Blacklists</h2>
-						<p>In comparison to the whitelist method described above, using a filter or blacklist to check for dangerous terms is not as useful.</p>
-						<p>This is because there are many more ways to bypass a blacklist method so simply blocking terms such as "../" or "/" is not sufficient to prevent all manipulation.</p>
-						<p>However, while potentially more dangerous, a fully comprehensive blacklist would be secure.</p>
+						<ul>
+							<li><p>In comparison to the whitelist method described above, using a filter or blacklist to check for dangerous terms is not as useful.</p></li>
+							<li><p>This is because there are many more ways to bypass a blacklist method so simply blocking terms such as "../" or "/" is not sufficient to prevent all manipulation.</p></li>
+							<li><p>However, while potentially more dangerous, a fully comprehensive blacklist would be secure.</p></li>
+						</ul>
 					</section>
 					<section>
 						<h2>Verification</h2>
-						<p>One way to close this security flaw is to simply double check the identity of the user on each request.</p>
-						<p>This stops any abuse of direct object references.</p>
-						<pre><code class="hljs" data-trim>
+						<ul>
+							<li><p>One way to close this security flaw is to simply double check the identity of the user on each request.</p></li>
+							<li><p>This stops any abuse of direct object references.</p></li>
+							<pre><code class="hljs" data-trim>
 [Authorize]
 public class AccountsController : Controller
 {
@@ -145,7 +162,8 @@ public class AccountsController : Controller
 			{
 				return new HttpUnauthorizedResult("User is not Authorized.");
 			} 
-       					</code></pre>
+       						</code></pre>
+       					</ul>
 					</section>
 				</section>
 
@@ -168,16 +186,18 @@ public class AccountsController : Controller
 					</section>
 				</section> -->
 
-				<section id="flaw-play">
+<!-- 				<section id="flaw-play">
 					<h2>How is it relevant to us?</h2>
-					<p>
-						When working with Scala/Play our applications are still <b style="color:#faa">vulnerable</b>.
-					</p>
-					<p>~~~</p>
+					<ul>
+						<li><p>
+							When working with Scala/Play our applications are still <b style="color:#faa">vulnerable</b>.
+						</p></li>
+						<p>~~~</p>
 
-					<p>All web frameworks are potentially vulnerable to this security flaw as it is a case of bad user practice most of the time.</p>
-					<p>However it is worth noting that Play! encourages practices through its' design which help prevent the creation of this flaw.</p>
-				</section>
+						<p>All web frameworks are potentially vulnerable to this security flaw as it is a case of bad user practice most of the time.</p>
+						<p>However it is worth noting that Play! encourages practices through its' design which help prevent the creation of this flaw.</p>
+					</ul>
+				</section> -->
 
 				<section id="flaw-summary">
 					<h1>Fin</h1>
