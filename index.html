@@ -41,10 +41,10 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
-				<section data-background-image="/images/matrix.gif" data-background-size="400px" data-background-repeat="repeat">
-					<div style="background-color:rgba(0,100,25,0.6);border-radius:50px;border:5px solid #fff;padding:50px;">
-						<h2>Insecure Direct Object Reference</h2>
-						<p>Research into OWASP Top 10 Risk List</p>
+				<section>
+					<div>
+						<h1>OWASP A4</h1>
+						<h3>Insecure Direct Object Reference</h3>
 						<p>
 							<br />
 							<small>Created by James Forster - <a href="mailto:james.forster@digital.hmrc.gov.uk">james.forster@digital.hmrc.gov.uk</a> </small>
@@ -76,18 +76,18 @@
 						<h2>Utilising the flaw</h2>
 						<ul>
 							<li><p>The potential intruder would first require access to an account of their own and the secure content it contains.</p></li>
-							<li><p>If there was no verification in place to prevent it, the intruder could then change the direct reference manually:</p></li>
+							<li><p>Because the direct reference is exposed it can be manually edited.</p></li>
+							<li><p>Changing this could result in access to data not intended for that user.</p></li>
 							<pre><code class="hljs" data-trim>
 								http://www.website.com/?accountid=2
 							</code></pre>
-							<li><p>Now they have access to all the information and potentially functions available to the account with the ID 2.</p></li>
 						</ul>
 					</section>
 					<section>
-						<h2>Vertical Escalation</h2>
+						<h2>Escalation of Privilege</h2>
 						<ul>
-							<li><p>The type of intrusion referred to above is known as horizontal escalation of privilege, where access level remains the same.</p></li>
-							<li><p>However in the worst cases this method can also provide a vertical escalation of privilege where a higher level of access can be gained.</p></li>
+							<li><p>Horizontal escalation of privilege is where you simply access data from another account where access level remains the same.</p></li>
+							<li><p>Vertical escalation of privilege is where a higher level of access can be gained such as admin information.</p></li>
 							<pre><code class="hljs" data-trim>
 								http://www.website.com/?accountid=2&admin=true
 							</code></pre>
@@ -120,10 +120,10 @@
 						</ul>
 					</section>
 					<section>
-						<h2>Mapping</h2>
+						<h2>Obfuscation</h2>
 						<ul>
-							<li><p>The direct object reference can be converted via mapping into a session based indirect reference.</p></li>
-							<li><p>The reference map provides a key which links the indirect reference to the direct reference without ever exposing that data to the user.</p></li>
+							<li><p>Passing the reference through a mapping function obscures the reference, making it indirect.</p></li>
+							<li><p>With an indirect reference it becomes very difficult to make a valid edit as an intruder.</p></li>
 							<li><p>While potentially less secure this can also be persisted beyond the session via encryption.</p></li>
 							<pre><code class="hljs" data-trim>
 								http://www.website.com/?accountid=Xvqw2JEm84w1qqLN1vE5XZUdc7BFqarB0
@@ -133,16 +133,16 @@
 					<section id="flaw-files">
 						<h2>Whitelist</h2>
 						<ul>
-							<li><p>A simple solution is to only permit access to certain files and pages as part of the request and simply checking that this is not breached by the input.</p></li>
-							<li><p>However it cannot prevent intruders from accessing files or pages that are accessible by only some users.</p></li>
+							<li><p>A simple solution is to only permit access to certain files and pages as part of the request.</p></li>
+							<li><p>However it cannot prevent intruders from accessing files or pages that are accessible by any users.</p></li>
 						</ul>
 					</section>	
 					<section>
 						<h2>Filters/Blacklists</h2>
 						<ul>
-							<li><p>In comparison to the whitelist method described above, using a filter or blacklist to check for dangerous terms is not as useful.</p></li>
-							<li><p>This is because there are many more ways to bypass a blacklist method so simply blocking terms such as "../" or "/" is not sufficient to prevent all manipulation.</p></li>
-							<li><p>However, while potentially more dangerous, a fully comprehensive blacklist would be secure.</p></li>
+							<li><p>A blacklist can be used to prevent dangerous edits by checking for certain characters.</p></li>
+							<li><p>However a blacklist has to be comprehensive to stop all malicious edits.</p></li>
+							<li><p>Whitelists provide a much more secure, but restrictive option.</p></li>
 						</ul>
 					</section>
 					<section>
